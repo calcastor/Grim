@@ -47,7 +47,6 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSp
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnPlayer;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUpdateAttributes;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowItems;
-import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -372,7 +371,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
 
     @Override
     public Set<PacketType.Play.Server> typesCheckedOnSend() {
-        return EnumSet.copyOf(Lists.newArrayList(
+        return EnumSet.of(
             PacketType.Play.Server.PING,
             PacketType.Play.Server.WINDOW_CONFIRMATION,
             PacketType.Play.Server.SPAWN_LIVING_ENTITY,
@@ -399,7 +398,7 @@ public class PacketEntityReplication extends Check implements PacketCheck {
             PacketType.Play.Server.SET_PASSENGERS,
             PacketType.Play.Server.ATTACH_ENTITY,
             PacketType.Play.Server.DESTROY_ENTITIES
-        ));
+        );
     }
 
     private void handleMountVehicle(PacketSendEvent event, int vehicleID, int[] passengers) {
