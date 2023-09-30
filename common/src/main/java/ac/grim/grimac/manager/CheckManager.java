@@ -102,8 +102,16 @@ import ac.grim.grimac.utils.latency.CompensatedInventory;
 import ac.grim.grimac.utils.team.TeamHandler;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -119,6 +127,7 @@ public class CheckManager {
     ClassToInstanceMap<BlockBreakCheck> blockBreakChecks;
     ClassToInstanceMap<BlockPlaceCheck> blockPlaceCheck;
     ClassToInstanceMap<PostPredictionCheck> postPredictionCheck;
+    Map<PacketType.Play.Server, List<PacketCheck>> packetSendChecks;
     private PacketEntityReplication packetEntityReplication = null;
     private CompensatedInventory inventory = null;
 
@@ -302,7 +311,38 @@ public class CheckManager {
                 .putAll(noneModules)
                 .build();
 
+        packetSendChecks = computePacketSendChecksMap(prePredictionChecks, packetChecks, postPredictionCheck);
+
         init();
+    }
+
+    @NotNull
+    private static Map<PacketType.Play.Server, List<PacketCheck>> computePacketSendChecksMap(ClassToInstanceMap<? extends PacketCheck> preChecks, ClassToInstanceMap<? extends PacketCheck> checks, ClassToInstanceMap<? extends PacketCheck> postChecks) {
+        Map<PacketType.Play.Server, List<PacketCheck>> typeCheckMap = new EnumMap<>(PacketType.Play.Server.class);
+        for (PacketType.Play.Server packetType : PacketType.Play.Server.values()) {
+            List<PacketCheck> packetChecks = new ArrayList<>();
+            for (PacketCheck check : preChecks.values()) {
+                if (check.typesCheckedOnSend().contains(packetType)) {
+                    packetChecks.add(check);
+                }
+            }
+            for (PacketCheck check : checks.values()) {
+                if (check.typesCheckedOnSend().contains(packetType)) {
+                    packetChecks.add(check);
+                }
+            }
+            for (PacketCheck check : postChecks.values()) {
+                if (check.typesCheckedOnSend().contains(packetType)) {
+                    packetChecks.add(check);
+                }
+            }
+            if (!packetChecks.isEmpty()) {
+                typeCheckMap.put(packetType, Collections.unmodifiableList(packetChecks));
+            } else {
+                typeCheckMap.put(packetType, Collections.emptyList());
+            }
+        }
+        return typeCheckMap;
     }
 
     @SuppressWarnings("unchecked")
@@ -347,13 +387,7 @@ public class CheckManager {
     }
 
     public void onPacketSend(final PacketSendEvent packet) {
-        for (PacketCheck check : prePredictionChecks.values()) {
-            check.onPacketSend(packet);
-        }
-        for (PacketCheck check : packetChecks.values()) {
-            check.onPacketSend(packet);
-        }
-        for (PostPredictionCheck check : postPredictionCheck.values()) {
+        for (PacketCheck check : packetSendChecks.get((PacketType.Play.Server) packet.getPacketType())) {
             check.onPacketSend(packet);
         }
         for (BlockPlaceCheck check : blockPlaceCheck.values()) {

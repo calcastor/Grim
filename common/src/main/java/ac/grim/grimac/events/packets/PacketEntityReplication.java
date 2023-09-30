@@ -47,9 +47,12 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSp
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnPlayer;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUpdateAttributes;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowItems;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -365,6 +368,38 @@ public class PacketEntityReplication extends Check implements PacketCheck {
                 }, maxFireworkBoostPing);
             }
         }
+    }
+
+    @Override
+    public Set<PacketType.Play.Server> typesCheckedOnSend() {
+        return EnumSet.copyOf(Lists.newArrayList(
+            PacketType.Play.Server.PING,
+            PacketType.Play.Server.WINDOW_CONFIRMATION,
+            PacketType.Play.Server.SPAWN_LIVING_ENTITY,
+            PacketType.Play.Server.SPAWN_ENTITY,
+            PacketType.Play.Server.SPAWN_PLAYER,
+            PacketType.Play.Server.SPAWN_PAINTING,
+            PacketType.Play.Server.ENTITY_RELATIVE_MOVE,
+            PacketType.Play.Server.ENTITY_RELATIVE_MOVE_AND_ROTATION,
+            PacketType.Play.Server.ENTITY_TELEPORT,
+            PacketType.Play.Server.ENTITY_POSITION_SYNC,
+            PacketType.Play.Server.ENTITY_ROTATION,
+            PacketType.Play.Server.ENTITY_METADATA,
+            PacketType.Play.Server.PLAYER_INFO_UPDATE,
+            PacketType.Play.Server.PLAYER_INFO_REMOVE,
+            PacketType.Play.Server.PLAYER_INFO,
+            PacketType.Play.Server.ENTITY_EFFECT,
+            PacketType.Play.Server.REMOVE_ENTITY_EFFECT,
+            PacketType.Play.Server.UPDATE_ATTRIBUTES,
+            PacketType.Play.Server.ENTITY_STATUS,
+            PacketType.Play.Server.SET_SLOT,
+            PacketType.Play.Server.WINDOW_ITEMS,
+            PacketType.Play.Server.OPEN_WINDOW,
+            PacketType.Play.Server.OPEN_HORSE_WINDOW,
+            PacketType.Play.Server.SET_PASSENGERS,
+            PacketType.Play.Server.ATTACH_ENTITY,
+            PacketType.Play.Server.DESTROY_ENTITIES
+        ));
     }
 
     private void handleMountVehicle(PacketSendEvent event, int vehicleID, int[] passengers) {

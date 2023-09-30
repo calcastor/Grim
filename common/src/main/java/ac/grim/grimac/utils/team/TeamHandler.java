@@ -12,7 +12,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 // Reminder: Entities use UUIDs, players use name, for setting teams.
@@ -62,5 +64,10 @@ public class TeamHandler extends Check implements PacketCheck {
                 }
             });
         }
+    }
+
+    @Override
+    public Set<PacketType.Play.Server> typesCheckedOnSend() {
+        return Collections.singleton(PacketType.Play.Server.TEAMS);
     }
 }

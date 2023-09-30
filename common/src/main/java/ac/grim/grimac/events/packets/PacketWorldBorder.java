@@ -12,6 +12,9 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWo
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWorldBorderSize;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayWorldBorderLerpSize;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public class PacketWorldBorder extends Check implements PacketCheck {
     double centerX;
     double centerZ;
@@ -82,6 +85,17 @@ public class PacketWorldBorder extends Check implements PacketCheck {
             WrapperPlayWorldBorderLerpSize size = new WrapperPlayWorldBorderLerpSize(event);
             setLerp(size.getOldDiameter(), size.getNewDiameter(), size.getSpeed());
         }
+    }
+
+    @Override
+    public Set<PacketType.Play.Server> typesCheckedOnSend() {
+        return EnumSet.of(
+            PacketType.Play.Server.WORLD_BORDER,
+            PacketType.Play.Server.INITIALIZE_WORLD_BORDER,
+            PacketType.Play.Server.WORLD_BORDER_CENTER,
+            PacketType.Play.Server.WORLD_BORDER_SIZE,
+            PacketType.Play.Server.WORLD_BORDER_LERP_SIZE
+        );
     }
 
     private void setCenter(double x, double z) {

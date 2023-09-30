@@ -18,8 +18,10 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientEn
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityAnimation;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import static com.github.retrooper.packetevents.protocol.packettype.PacketType.Play.Client.ANIMATION;
 import static com.github.retrooper.packetevents.protocol.packettype.PacketType.Play.Client.CLICK_WINDOW;
@@ -71,6 +73,11 @@ public class Post extends Check implements PacketCheck, PostPredictionCheck {
                 }
             }
         }
+    }
+
+    @Override
+    public Set<PacketType.Play.Server> typesCheckedOnSend() {
+        return Collections.singleton(PacketType.Play.Server.ENTITY_ANIMATION);
     }
 
     @Override

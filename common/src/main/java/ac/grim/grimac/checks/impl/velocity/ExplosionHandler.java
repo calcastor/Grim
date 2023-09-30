@@ -24,8 +24,10 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEx
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Set;
 
 @CheckData(name = "AntiExplosion", configName = "Explosion", setback = 10)
 public class ExplosionHandler extends Check implements PostPredictionCheck {
@@ -100,6 +102,11 @@ public class ExplosionHandler extends Check implements PostPredictionCheck {
                 }
             }
         });
+    }
+
+    @Override
+    public Set<PacketType.Play.Server> typesCheckedOnSend() {
+        return Collections.singleton(PacketType.Play.Server.EXPLOSION);
     }
 
     public VelocityData getFutureExplosion() {
