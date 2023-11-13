@@ -197,7 +197,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
         if (packet instanceof WrapperPlayClientPlayerBlockPlacement place &&
                 PacketEvents.getAPI().getServerManager().getVersion().isOlderThan(ServerVersion.V_1_9)) {
 
-            if (player.gamemode == GameMode.SPECTATOR || player.gamemode == GameMode.ADVENTURE)
+            if (player.gamemode == GameMode.SPECTATOR)
                 return;
 
             if (place.getFace() == BlockFace.OTHER) {
@@ -212,7 +212,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
         }
 
         if (packet instanceof WrapperPlayClientUseItem place) {
-            if (player.gamemode == GameMode.SPECTATOR || player.gamemode == GameMode.ADVENTURE)
+            if (player.gamemode == GameMode.SPECTATOR)
                 return;
 
             ItemStack placedWith = player.getInventory().getHeldItem();
@@ -258,7 +258,7 @@ public class CheckManagerListener extends PacketListenerAbstract {
         }
 
         if (packet instanceof WrapperPlayClientPlayerBlockPlacement place) {
-            if (player.gamemode == GameMode.SPECTATOR || player.gamemode == GameMode.ADVENTURE)
+            if (player.gamemode == GameMode.SPECTATOR)
                 return;
 
             Vector3i blockPosition = place.getBlockPosition();
