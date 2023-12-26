@@ -44,8 +44,10 @@ public final class BoundingBoxSize {
             return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) ? 1.3964844f : 1.4f;
         } else if (EntityTypes.isTypeInstanceOf(type, EntityTypes.BOAT)) {
             return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) ? 1.375f : 1.5f;
-        } else if (EntityTypes.CHICKEN.equals(type) || EntityTypes.ENDERMITE.equals(type) || EntityTypes.SILVERFISH.equals(type) || EntityTypes.VEX.equals(type) || EntityTypes.TADPOLE.equals(type)) {
+        } else if (EntityTypes.CHICKEN.equals(type) || EntityTypes.ENDERMITE.equals(type) || EntityTypes.VEX.equals(type) || EntityTypes.TADPOLE.equals(type)) {
             return 0.4f;
+        } else if (EntityTypes.isTypeInstanceOf(type, EntityTypes.SILVERFISH)) {
+            return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_8) ? 0.4f : 0.3f;
         } else if (EntityTypes.RABBIT.equals(type)) {
             return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) ? 0.4f : 0.6f;
         } else if (EntityTypes.CREAKING.equals(type) || EntityTypes.STRIDER.equals(type) || EntityTypes.COW.equals(type) || EntityTypes.SHEEP.equals(type) || EntityTypes.MOOSHROOM.equals(type) || EntityTypes.PIG.equals(type) || EntityTypes.LLAMA.equals(type) || EntityTypes.DOLPHIN.equals(type) || EntityTypes.WITHER.equals(type) || EntityTypes.TRADER_LLAMA.equals(type) || EntityTypes.WARDEN.equals(type) || EntityTypes.GOAT.equals(type)) {
@@ -348,7 +350,7 @@ public final class BoundingBoxSize {
         } else if (EntityTypes.SHULKER.equals(type)) { // Could maybe guess peek size, although seems useless
             return 2f;
         } else if (EntityTypes.SILVERFISH.equals(type)) {
-            return 0.3f;
+            return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_8) ? 0.3f : 0.7f;
         } else if (EntityTypes.SKELETON.equals(type)) {
             return player.getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9) ? 1.99f : 1.95f;
         } else if (EntityTypes.SKELETON_HORSE.equals(type)) {
