@@ -55,6 +55,7 @@ public class Reach extends Check implements PacketCheck {
     // Only one flag per reach attack, per entity, per tick.
     // We store position because lastX isn't reliable on teleports.
     private final Int2ObjectMap<Vector3d> playerAttackQueue = new Int2ObjectOpenHashMap<>();
+    private boolean ignoreNonPlayerTargets;
     private boolean cancelImpossibleHits;
     private double threshold;
     private double cancelBuffer; // For the next 4 hits after using reach, we aggressively cancel reach
@@ -85,6 +86,10 @@ public class Reach extends Check implements PacketCheck {
                     event.setCancelled(true);
                     player.onPacketCancel();
                 }
+                return;
+            }
+
+            if (ignoreNonPlayerTargets && !entity.getType().equals(EntityTypes.PLAYER)) {
                 return;
             }
 
@@ -255,6 +260,7 @@ public class Reach extends Check implements PacketCheck {
 
     @Override
     public void onReload(ConfigManager config) {
+        this.ignoreNonPlayerTargets = config.getBooleanElse("Reach.ignore-non-player-targets", false);
         this.cancelImpossibleHits = config.getBooleanElse("Reach.block-impossible-hits", true);
         this.threshold = config.getDoubleElse("Reach.threshold", 0.0005);
     }
