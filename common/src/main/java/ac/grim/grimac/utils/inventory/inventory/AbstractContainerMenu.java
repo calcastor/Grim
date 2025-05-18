@@ -206,6 +206,9 @@ public abstract class AbstractContainerMenu {
                 }
 
                 for (ItemStack itemstack9 = this.quickMoveStack(slotID); !itemstack9.isEmpty() && ItemStack.isSameItemSameTags(stack.getItem(), itemstack9); itemstack9 = this.quickMoveStack(slotID)) {
+                    if (this.player.platformPlayer != null && !this.player.platformPlayer.isOnline()) {
+                        break;
+                    }
                 }
             } else {
                 if (slotID < 0) return;

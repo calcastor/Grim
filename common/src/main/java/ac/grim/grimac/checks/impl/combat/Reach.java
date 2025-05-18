@@ -70,7 +70,7 @@ public class Reach extends Check implements PacketCheck {
             WrapperPlayClientInteractEntity action = new WrapperPlayClientInteractEntity(event);
 
             // Don't let the player teleport to bypass reach
-            if (player.getSetbackTeleportUtil().shouldBlockMovement()) {
+            if (shouldModifyPackets() && player.getSetbackTeleportUtil().shouldBlockMovement()) {
                 event.setCancelled(true);
                 player.onPacketCancel();
                 return;

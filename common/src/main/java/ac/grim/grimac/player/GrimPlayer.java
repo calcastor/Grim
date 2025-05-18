@@ -530,7 +530,12 @@ public class GrimPlayer implements GrimUser {
             sendTransaction(true); // send on netty thread
         }
         if ((System.nanoTime() - getPlayerClockAtLeast()) > maxTransactionTime * 1e9) {
-            timedOut();
+            if (platformPlayer != null && !platformPlayer.isOnline()) {
+                GrimAPI.INSTANCE.getPlayerDataManager().remove(user);
+                return;
+            } else {
+                timedOut();
+            }
         }
 
         if (!GrimAPI.INSTANCE.getPlayerDataManager().shouldCheck(user)) {
